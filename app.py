@@ -24,7 +24,31 @@ import time
 import requests
 import json
 import streamlit as st
+import io
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.cidfonts import UnicodeCIDFont
 
+def create_pdf(text):
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=A4)
+    # 日本語フォントの設定
+    pdfmetrics.registerFont(UnicodeCIDFont('HeiseiKakuGo-W5'))
+    p.setFont('HeiseiKakuGo-W5', 10)
+    
+    y = 800
+    for line in text.split('\n'):
+        if y < 50:
+            p.showPage()
+            p.setFont('HeiseiKakuGo-W5', 10)
+            y = 800
+        p.drawString(40, y, line[:50])
+        y -= 15
+        
+    p.save()
+    buffer.seek(0)
+    return buffer
 # ---------------------------------------------------------------------------
 # 0. モニター限定のパスワード設定
 # ---------------------------------------------------------------------------
@@ -169,6 +193,7 @@ def check_password():
         st.session_state.authenticated = False
 
     if not st.session_state.authenticated:
+        st.image("logo.jpeg", use_container_width=True)
         st.markdown("<h2 style='text-align: center; color: #1f3a93;'>The √ Structure Method for ES</h2>", unsafe_allow_html=True)
         st.markdown("<p style='text-align: center;'>選ばれるガクチカ＆自己PRのためのAIアドバイザー</p>", unsafe_allow_html=True)
         
@@ -183,6 +208,7 @@ def check_password():
     return True
 
 if check_password():
+    st.image("logo.jpeg", use_container_width=True)
     st.markdown("<h2 style='color: #1f3a93;'>√Structure (ルート構造) AI添削</h2>", unsafe_allow_html=True)
     st.write("授業で学んだ「ルート構造」の7つの要素を入力してください。AIがあなたの経験を、選考を通過するレベルへと引き上げます。")
     st.info("※「ルート構造」は、国家資格キャリアコンサルティング技能士・日詰慎一郎の独自メソッドとして商標登録出願中（第35・41・42類）です。")
@@ -290,4 +316,16 @@ if check_password():
                     st.caption("※AIの特性上、指定文字数を若干前後する場合があります。提出前に文字数を微調整してください。")
                     
                     st.markdown("---")
-                    st.markdown(ai_output)
+                    st.image("logo.jpeg", use_container_width=True)
+            
+            # 添削結果の表示
+            st.markdown(ai_output)
+            
+            # ↓↓↓ 4か所目：PDFダウンロードボタン ↓↓↓
+            st.markdown("---")
+            pdf_data = create_pdf(ai_output)
+            st.download_button(
+                label="📥 添削結果をPDFで保存",
+                data=pdf_data,
+                file_name="ES_Advice_Report.pdf",
+                mime="application/pdf")
