@@ -326,19 +326,23 @@ if check_password():
                     len_200 = count_pure_text_length(es_200)
                     st.markdown(f"**【実文字数チェッカー】** 400字版: `{len_400}字` / 200字版: `{len_200}字`")
                     st.caption("※AIの特性上、指定文字数を若干前後する場合があります。提出前に文字数を微調整してください。")
+                    st.info("💡 **ワンポイントアドバイス**\n面接では緊張するので、ルートの形状を意識して、ルートの順番で伝えましょう！")
                     
                     st.markdown("---")
                     st.image("logo.jpeg", use_container_width=True)
+                    
+                    # 添削結果の表示
+                    st.markdown(ai_output)
+                    
+                    # ↓↓↓ 4か所目：PDFダウンロードボタン ↓↓↓
+                    st.markdown("---")
+                    pdf_text = f"{ai_output}\n\n---------------------------------------------\n【実文字数チェッカー】\n400字版: {len_400}字 / 200字版: {len_200}字\n※AIの特性上、指定文字数を若干前後する場合があります。\n\n💡 ワンポイントアドバイス\n面接では緊張するので、ルートの形状を意識して、ルートの順番で伝えましょう！"
+                    pdf_data = create_pdf(pdf_text)
+                    
+                    st.download_button(
+                        label="📥 添削結果をPDFで保存",
+                        data=pdf_data,
+                        file_name="ES_Advice_Report.pdf",
+                        mime="application/pdf"
+            )
             
-            # 添削結果の表示
-            st.markdown(ai_output)
-            
-            # ↓↓↓ 4か所目：PDFダウンロードボタン ↓↓↓
-            st.markdown("---")
-            pdf_text = f"{ai_output}\n\n---------------------------------------------\n【実文字数チェッカー】\n400字版: {len_400}字 / 200字版: {len_200}字\n※AIの特性上、指定文字数を若干前後する場合があります。"
-            pdf_data = create_pdf(pdf_text)
-            st.download_button(
-                label="📥 添削結果をPDFで保存",
-                data=pdf_data,
-                file_name="ES_Advice_Report.pdf",
-                mime="application/pdf")
