@@ -222,7 +222,7 @@ def check_password():
 if check_password():
     st.image("logo.jpeg", use_container_width=True)
     st.markdown("<h2 style='color: #1f3a93;'>√Structure (ルート構造) AI添削</h2>", unsafe_allow_html=True)
-    st.write("授業で学んだ「ルート構造」の7つの要素を入力してください。AIがあなたの経験を、選考を通過するレベルへと引き上げます。")
+    st.write("「ルート構造」の7つの要素を入力してください。AIがあなたの経験を、選考を通過するレベルへと引き上げます。")
     st.info("※「ルート構造」は、国家資格キャリアコンサルティング技能士・日詰慎一郎の独自メソッドとして商標登録出願中（第35・41・42類）です。")
 
     with st.form("input_form"):
