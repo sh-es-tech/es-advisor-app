@@ -335,7 +335,8 @@ if check_password():
             
             # ↓↓↓ 4か所目：PDFダウンロードボタン ↓↓↓
             st.markdown("---")
-            pdf_data = create_pdf(ai_output)
+            pdf_text = f"{ai_output}\n\n---------------------------------------------\n【実文字数チェッカー】\n400字版: {len_400}字 / 200字版: {len_200}字\n※AIの特性上、指定文字数を若干前後する場合があります。"
+            pdf_data = create_pdf(pdf_text)
             st.download_button(
                 label="📥 添削結果をPDFで保存",
                 data=pdf_data,
