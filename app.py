@@ -25,6 +25,7 @@ import requests
 import json
 import streamlit as st
 import io
+import textwrap
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
@@ -38,17 +39,28 @@ def create_pdf(text):
     p.setFont('HeiseiKakuGo-W5', 10)
     
     y = 800
+    # 文章を改行ごとに分割
     for line in text.split('\n'):
-        if y < 50:
-            p.showPage()
-            p.setFont('HeiseiKakuGo-W5', 10)
-            y = 800
-        p.drawString(40, y, line[:50])
-        y -= 15
+        # 長い行を自動で折り返す（A4幅に合わせて全角45文字で改行）
+        wrapped_lines = textwrap.wrap(line, width=45)
         
+        # 空行（改行のみ）の場合の処理
+        if not wrapped_lines:
+            y -= 15
+            continue
+            
+        for w_line in wrapped_lines:
+            if y < 50:
+                p.showPage()
+                p.setFont('HeiseiKakuGo-W5', 10)
+                y = 800
+            p.drawString(40, y, w_line)
+            y -= 15
+            
     p.save()
     buffer.seek(0)
     return buffer
+
 # ---------------------------------------------------------------------------
 # 0. モニター限定のパスワード設定
 # ---------------------------------------------------------------------------
