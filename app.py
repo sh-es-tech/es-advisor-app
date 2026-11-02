@@ -224,7 +224,7 @@ if check_password():
     st.markdown("<h2 style='color: #1f3a93;'>√Structure (ルート構造) AI添削</h2>", unsafe_allow_html=True)
     st.write("「ルート構造」の7つの要素を入力してください。AIがあなたの経験を、選考を通過するレベルへと引き上げます。")
     st.info("※「ルート構造」は、国家資格キャリアコンサルティング技能士・日詰慎一郎の独自メソッドとして商標登録出願中（第35・41・42類）です。")
-    st.image("root-structure.jpg", use_container_width=True)
+    st.image("root-structure.jpeg", use_container_width=True)
     with st.form("input_form"):
         essay_type = st.radio(
             "■ 添削モードの選択",
